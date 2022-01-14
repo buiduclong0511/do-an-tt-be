@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class CategoryController extends Controller
     public function index()
     {
         return response([
-            'message' => 'Get categories success.',
-            'data' => Category::all()
+            'message' => 'Get data success.',
+            'data' => Product::all()
         ]);
     }
 
@@ -29,30 +29,27 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'name' => 'required|max:191|unique:categories,name'
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required|max:191',
+            'description' => 'required|max:1000',
+            'price' => 'required|numeric',
         ]);
 
-        $category = null;
+        $product = null;
 
         if ($request->image) {
             $path = 'images/' . time() . '-' . $request->image->getClientOriginalName();
-
             $request->image->move(public_path('images'), $path);
 
-            $category = Category::create([
-                'name' => $fields['name'],
-                'image' => $path
-            ]);
+            $product = Product::create(array_merge(['image' => $path], $fields));
         } else {
-            $category = Category::create([
-                'name' => $fields['name']
-            ]);
+            $product = Product::create($fields);
         }
 
         return response([
-            'message' => 'Category was created.',
-            'data' => $category
-        ], 201);
+            'message' => 'Product was created.',
+            'data' => $product
+        ]);
     }
 
     /**
@@ -63,11 +60,17 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::findOrFail($id);
+        $product = Product::with('category')->where('id', $id)->get()->first();
+
+        if (!$product) {
+            return response([
+                'message' => 'Product not found.'
+            ], 404);
+        }
 
         return response([
             'message' => 'Get data success.',
-            'data' => $category
+            'data' => $product
         ]);
     }
 
@@ -80,20 +83,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = Category::findOrFail($id);
+        $product = Product::findOrFail($id);
 
         if ($request->image) {
             $path = 'images/' . time() . '-' . $request->image->getClientOriginalName();
-            $category->update(array_merge($request->all(), [
+            $product->update(array_merge($request->all(), [
                 'image' => $path
             ]));
         } else {
-            $category->update($request->all());
+            $product->update($request->all());
         }
 
         return response([
-            'message' => 'Category was updated.',
-            'data' => $category
+            'message' => 'Product was updated.',
+            'data' => $product
         ]);
     }
 
@@ -105,10 +108,10 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        Category::destroy($id);
+        Product::destroy($id);
 
-        return [
-            'message' => 'Category was deleted.'
-        ];
+        return response([
+            'message' => 'Product was deleted.'
+        ]);
     }
 }
