@@ -31,6 +31,7 @@ class AuthController extends Controller
         $token = $user->createToken('myapptoken')->plainTextToken;
 
         $response = [
+            'message' => 'Registered.',
             'user' => $user,
             'token' => $token
         ];
@@ -55,7 +56,7 @@ class AuthController extends Controller
         $token = $user->createToken('myapptoken')->plainTextToken;
 
         return response([
-            'message' => 'Logged in',
+            'message' => 'Logged in.',
             'user' => $user,
             'token' => $token
         ]);

@@ -24,9 +24,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/auth/me', [AuthController::class, 'getMe']);
 
     Route::group(['middleware' => ['admin']], function () {
+
+        // category
         Route::post('/categories', [CategoryController::class, 'store']);
+        Route::patch('/categories/{id}', [CategoryController::class, 'update']);
+        Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
     });
 });
 
 // category
 Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{id}', [CategoryController::class, 'show']);
