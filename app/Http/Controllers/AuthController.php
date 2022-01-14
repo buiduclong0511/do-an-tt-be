@@ -15,10 +15,17 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
 
+        $role = 0;
+
+        if ($request->role) {
+            $role = $request->role;
+        }
+
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
+            'password' => bcrypt($fields['password']),
+            'role' => $role
         ]);
 
         $token = $user->createToken('myapptoken')->plainTextToken;
