@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -17,12 +18,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// auth
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
+// category
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{id}', [CategoryController::class, 'show']);
+
+// product
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // auth
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'getMe']);
+
+    // cart
+    Route::get('/carts', [CartController::class, 'getCartByUserId']);
+    Route::post('/carts', [CartController::class, 'addProductToCart']);
+    Route::patch('/carts', [CartController::class, 'deleteProductFromCart']);
 
     Route::group(['middleware' => ['admin']], function () {
 
@@ -37,11 +53,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     });
 });
-
-// category
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{id}', [CategoryController::class, 'show']);
-
-// product
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{id}', [ProductController::class, 'show']);

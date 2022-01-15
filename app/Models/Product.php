@@ -18,8 +18,11 @@ class Product extends Model
         'category_id'
     ];
 
-    public function category()
-    {
+    public function category() {
         return $this->belongsTo(Category::class);
+    }
+
+    public function Carts() {
+        return $this->belongsToMany(Cart::class, 'product_cart', 'product_id', 'cart_id');
     }
 }
