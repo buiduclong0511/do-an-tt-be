@@ -12,8 +12,17 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $q = $request->q;
+        if ($q) {
+            $categories = Category::where('name', 'like', '%'.$q.'%')->orWhere('id', $q)->get();
+            return response([
+                'message' => 'Get categories success.',
+                'data' => $categories
+            ]);
+        }
+
         return response([
             'message' => 'Get categories success.',
             'data' => Category::all()

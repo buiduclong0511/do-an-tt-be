@@ -12,8 +12,18 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        $q = $request->q;
+        if ($q) {
+            $products = Product::where('name', 'like', '%'.$q.'%')->orWhere('id', $q)->get();
+            return response([
+                'message' => 'Get data success.',
+                'data' => $products
+            ]);
+        }
+
         return response([
             'message' => 'Get data success.',
             'data' => Product::all()
