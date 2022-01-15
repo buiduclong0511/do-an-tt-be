@@ -87,6 +87,7 @@ class ProductController extends Controller
 
         if ($request->image) {
             $path = 'images/' . time() . '-' . $request->image->getClientOriginalName();
+            $request->image->move(public_path('images'), $path);
             $product->update(array_merge($request->all(), [
                 'image' => $path
             ]));
