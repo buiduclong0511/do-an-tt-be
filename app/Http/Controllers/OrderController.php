@@ -7,6 +7,22 @@ use App\Models\Order;
 
 class OrderController extends Controller
 {
+    public function index(Request $request) {
+        $q = $request->q;
+
+        return response([
+            'message' => 'get data success.',
+            'data' => Order::with(['user', 'product'])
+                ->whereHas('user', function ($query) use($q) {
+                    $query->where('name', 'like', '%'.$q.'%');
+                })
+                ->orWhereHas('product', function ($query) use($q) {
+                    $query->where('name', 'like', '%'.$q.'%');
+                })
+                ->get()
+        ]);
+    }
+
     public function getOrderUser() {
         return response([
             'message' => 'Get data success.',
@@ -16,14 +32,16 @@ class OrderController extends Controller
 
     public function createOrder(Request $request) {
         $fields = $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'receiver' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
             'product_id' => 'required|exists:products,id',
             'number' => 'required',
             'price' => 'required'
         ]);
 
 
-        Order::create(array_merge($fields, ['status' => 0]));
+        Order::create(array_merge($fields, ['status' => 0, 'user_id' => auth()->user()->id]));
 
 
         return response([

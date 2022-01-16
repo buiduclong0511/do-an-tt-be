@@ -14,7 +14,10 @@ class Order extends Model
         'product_id',
         'number',
         'price',
-        'status'
+        'status',
+        'receiver',
+        'address',
+        'phone'
     ];
 
     public function user() {
