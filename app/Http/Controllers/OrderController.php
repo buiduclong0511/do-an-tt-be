@@ -23,7 +23,7 @@ class OrderController extends Controller
         ]);
 
 
-        $order = Order::create(array_merge($fields, ['status' => 0]));
+        Order::create(array_merge($fields, ['status' => 0]));
 
 
         return response([
@@ -37,7 +37,9 @@ class OrderController extends Controller
         Order::destroy($id);
 
         return response([
-            'message' => 'Order was deleted.'
+            'message' => 'Order was deleted.',
+            'data' => Order::with('product')->where('user_id', auth()->user()->id)->get()
         ]);
+
     }
 }

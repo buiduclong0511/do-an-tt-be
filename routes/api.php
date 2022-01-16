@@ -26,6 +26,7 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 // category
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{id}', [CategoryController::class, 'show']);
+Route::get('/categories/{id}/products', [CategoryController::class, 'getCategoryProduct']);
 
 // product
 Route::get('/products', [ProductController::class, 'index']);

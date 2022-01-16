@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -26,6 +27,13 @@ class CategoryController extends Controller
         return response([
             'message' => 'Get categories success.',
             'data' => Category::all()
+        ]);
+    }
+
+    public function getCategoryProduct($id) {
+        return response([
+            'message' => 'Get data success.',
+            'data' => Product::where('category_id', $id)->get()
         ]);
     }
 
