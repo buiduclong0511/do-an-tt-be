@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/carts', [CartController::class, 'getCartByUserId']);
     Route::post('/carts', [CartController::class, 'addProductToCart']);
     Route::patch('/carts', [CartController::class, 'deleteProductFromCart']);
+
+    // order
+    Route::post('/orders', [OrderController::class, 'createOrder']);
+    Route::get('/orders', [OrderController::class, 'getOrderUser']);
 
     Route::group(['middleware' => ['admin']], function () {
 

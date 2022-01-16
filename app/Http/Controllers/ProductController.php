@@ -16,17 +16,25 @@ class ProductController extends Controller
     {
 
         $q = $request->q;
-        if ($q) {
-            $products = Product::where('name', 'like', '%'.$q.'%')->orWhere('id', $q)->get();
-            return response([
-                'message' => 'Get data success.',
-                'data' => $products
-            ]);
+        $orderBy = $request->orderBy;
+        $sortDir = $request->sortDir;
+
+        if (!$orderBy) {
+            $orderBy = 'created_at';
         }
+        if (!$sortDir) {
+            $sortDir = 'DESC';
+        }
+
+        $products = Product::withCount('orders')
+            ->where('name', 'like', '%'.$q.'%')
+            ->orWhere('id', $q)
+            ->orderBy($orderBy, $sortDir)
+            ->get();
 
         return response([
             'message' => 'Get data success.',
-            'data' => Product::all()
+            'data' => $products
         ]);
     }
 
