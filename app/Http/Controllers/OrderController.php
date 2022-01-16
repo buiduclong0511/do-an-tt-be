@@ -13,9 +13,7 @@ class OrderController extends Controller
         return response([
             'message' => 'get data success.',
             'data' => Order::with(['user', 'product'])
-                ->whereHas('user', function ($query) use($q) {
-                    $query->where('name', 'like', '%'.$q.'%');
-                })
+                ->where('receiver', 'like', '%'.$q.'%')
                 ->orWhereHas('product', function ($query) use($q) {
                     $query->where('name', 'like', '%'.$q.'%');
                 })
