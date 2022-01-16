@@ -33,7 +33,7 @@ class CategoryController extends Controller
     public function getCategoryProduct($id) {
         return response([
             'message' => 'Get data success.',
-            'data' => Product::where('category_id', $id)->get()
+            'data' => Product::withCount('orders')->where('category_id', $id)->get()
         ]);
     }
 

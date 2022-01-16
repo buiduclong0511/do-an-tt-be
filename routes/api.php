@@ -58,5 +58,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/products', [ProductController::class, 'store']);
         Route::patch('/products/{id}', [ProductController::class, 'update']);
         Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
+        // order
+        Route::post('/orders/{id}/change-status', [OrderController::class, 'changeStatus']);
     });
 });

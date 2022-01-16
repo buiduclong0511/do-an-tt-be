@@ -33,6 +33,21 @@ class OrderController extends Controller
 
     }
 
+    public function changeStatus(Request $request, $id) {
+        $fields = $request->validate([
+            'status' => 'required|in:0,1,2'
+        ]);
+
+        $order = Order::findOrFail($id);
+
+        $order->update(['status' => $fields['status']]);
+
+        return response([
+            'message' => 'Order status was changed.',
+            'data' => $order
+        ]);
+    }
+
     public function destroy($id) {
         Order::destroy($id);
 
