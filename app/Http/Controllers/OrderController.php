@@ -32,4 +32,12 @@ class OrderController extends Controller
         ]);
 
     }
+
+    public function destroy($id) {
+        Order::destroy($id);
+
+        return response([
+            'message' => 'Order was deleted.'
+        ]);
+    }
 }
