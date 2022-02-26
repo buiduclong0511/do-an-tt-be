@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -62,5 +63,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         // order
         Route::post('/orders/{id}/change-status', [OrderController::class, 'changeStatus']);
         Route::get('/orders/all', [OrderController::class, 'index']);
+
+        // account
+        Route::get('/users', [UserController::class, 'index']);
+        Route::patch('/users/{id}', [UserController::class, 'update']);
+        Route::delete('/users/{id}', [UserController::class, 'destroy']);
     });
 });
